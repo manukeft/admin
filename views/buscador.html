@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    li {
+      list-style: none;
+      border: 1px solid silver;
+      border-radius: 12px;
+      padding: 12px;
+      display: inline-block;
+      margin: 10px;
+      background-color: lightsalmon;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+
+  <form action="/buscador" method="get">
+    <input type="search" placeholder="Escribe algo" name="busqueda" required>
+    <input type="submit" value="Buscar">
+  </form>
+  {% if search.length > 0 %}
+  <h1>Resultados de búsqueda de libros que contengan: <strong>{{search}}</strong></h1>
+  <ul>
+    {% for l in data %}
+    <li>
+      {{ l.titulo }}, {{ l.autor }}
+      <form action="/actualizar" method="post">
+        <input type="hidden" name="titulo" value="{{l.titulo}}">
+        <label>Actualizar precio:</label>
+        <input type="number" name="precio" min="1" max="15000" value="{{l.precio}}">
+        <br>
+        <input type="submit" value="Actualizar">
+      </form>
+      <form action="/borrar" method="post">
+        <input type="hidden" name="titulo" value="{{l.titulo}}">
+        <input type="submit" value="Borrar">
+      </form>
+    </li>
+    {% endfor %}
+  </ul>
+  <p>Encontrados {{data.length}}</p>
+  {% endif %}
+  {% if data.length == 0 %}
+  <h2>No se han encontrado resultados</h2>
+  {% endif %}
+</body>
+
+</html>

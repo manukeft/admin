@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Alta de peliculas</title>
+  <style>
+    input {
+      display: block;
+      margin: 12px;
+    }
+  </style>
+
+  <head>
+
+  <body>
+    <h1>Agregar libro</h1>
+    <form method="post" action="/agregarlibro">
+      <input type="number" name="isbn" placeholder="Ingrese el ISBN..." required>
+      <input type="text" name="titulo" placeholder="Ingrese el titulo..." required>
+      <input type="text" name="autor" placeholder="Autor..." required>
+      <input type="number" name="year" placeholder="Año..." required>
+      <input type="text" name="idioma" placeholder="Idioma..." required>
+      <input type="text" name="editorial" placeholder="Editorial..." required>
+      <input type="number" name="precio" placeholder="Ingrese el precio..." required>
+      <input type="submit" value="Agregar">
+    </form>
+    <br>
+    <h1><a href="/buscador">Buscar libros</a></h1>
+
+    <p><a href='/logout'>Cerrar sesión</a></p>
+
+<body>
+  <html>
