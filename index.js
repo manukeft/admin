@@ -7,6 +7,7 @@ const port = 8081;
 
 session = require("express-session");
 
+
 app.use(session({
     secret:  process.env.SECRETSESSION || 'string-supersecreto-nuncavisto-jamas',
     name: 'sessionId',
@@ -79,13 +80,13 @@ app.get("/", (req, res) => {
 app.all("/login/", (req, res) => {
   async function login() {
     await client.connect();
-    const db = client.db("tv");
-    const collection = db.collection("usuarios");
+    const db = client.db(process.env.DB);
+    const collection = db.collection(process.env.COL);
     const usuario = await collection.findOne({ user: req.body.usuario });
     //console.log(usuario)
     return usuario;
   }
-  if (req.body.usuario && sha512(req.body.password)) {
+  if (req.body.usuario && req.body.password) {
     login()
       .then((usuario) => {
         if (usuario) {
