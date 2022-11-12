@@ -74,15 +74,19 @@ const auth = function (req, res, next) {
 
 // Página de inicio con el formulario de alta
 app.get("/", (req, res) => {
-  res.status(200).sendFile(__dirname + "/index.html");
+  res.render("index.html", );
 });
+
+// app.get("/", (req, res) => {
+//   res.status(200).sendFile(__dirname + "/views/index.html");
+// });
 
 app.all("/login/", (req, res) => {
   async function login() {
     await client.connect();
     const db = client.db(process.env.DB);
-    const collection = db.collection(process.env.COL);
-    const usuario = await collection.findOne({ user: req.body.usuario });
+    const collection = db.collection(process.env.COL_USUARIOS);
+    const usuario = await collection.findOne({ "user": req.body.usuario });
     //console.log(usuario)
     return usuario;
   }
@@ -90,9 +94,6 @@ app.all("/login/", (req, res) => {
     login()
       .then((usuario) => {
         if (usuario) {
-          // Verificamos el password ingresado en el formulario con el del usuario de la base de datos
-          // Se recomienda guardar contraseñas hasheadas. Ej: http://cryptocoinjs.com/modules/crypto/sha512/
-          //console.log(usuario)
           if (req.body.password == usuario.password) {
             res.render("login.html", { nombre: usuario.name });
           } else {
@@ -113,9 +114,9 @@ app.all("/login/", (req, res) => {
 });	
 
   app.all("/logout", function (req, res) {
-    // Limpiamos todos los datos de sesión
+    // Limpia todos los datos de sesión
     req.session.destroy();
-    // Informamos el usuario que la sesión ha sido cerrada
+    // Informa a el usuario que la sesión ha sido cerrada
     res.send("<h1>Sesión cerrada! Regresar al <a href='/'>login</a><h1>");
   });
 
@@ -126,9 +127,8 @@ app.get("/home", (req, res) => {
 app.post("/agregarlibro", (req, res) => {
   console.log(req.body);
   
-  // En myData obtenemos toda la info del formulario
   const myData = new coleccion(req.body);
-  // Realiza un equivalente insertOne
+
   myData
     .save()
     .then((item) => {
