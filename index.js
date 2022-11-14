@@ -9,7 +9,7 @@ session = require("express-session");
 
 
 app.use(session({
-    secret:  process.env.SECRETSESSION || 'string-supersecreto-nuncavisto-jamas',
+    secret:  process.env.SECRETSESSION || 'string-secreto-string-hola',
     name: 'sessionId',
     proxy: true,
     resave: true,
@@ -39,7 +39,7 @@ mongoose.connect("mongodb://localhost:27017/tv", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
-// Definimos el esquema | IMPORTANTE que los names de los elementos del formulario coincidan con los keys de la colección de la base de datos
+// Definimos el esquema
 const librosSchema = new mongoose.Schema({
   isbn: {
     type: Number,
@@ -56,10 +56,9 @@ const librosSchema = new mongoose.Schema({
 const coleccion = mongoose.model("libros", librosSchema);
 
 const auth = function (req, res, next) {
-  // Requerimiento para acceder: sesión iniciada, usuarios dami y admin
   if (
     req.session &&
-    req.session.user === process.env.USER &&
+    req.session.user &&
     req.session.admin
   ) {
     return next();
@@ -121,7 +120,7 @@ app.all("/login/", (req, res) => {
   });
 
 app.get("/home", (req, res) => {
-  res.status(200).sendFile(__dirname + "/views/home.html");
+  res.render("home.html");
 });
 
 app.post("/agregarlibro", (req, res) => {
@@ -168,11 +167,11 @@ app.all("/borrar", (req, res) => {
       await client.connect();
       const db = client.db(process.env.DB);
       const collection = db.collection(process.env.COL);
-      return await collection.deleteOne({titulo: req.body.titulo});
+      return await collection.deleteOne({ titulo: req.body.titulo });
     }
     borrar()
       .then((data) => {
-        res.render("borrar.html", {data, titulo: req.body.titulo});
+        res.render("borrar.html", { data, titulo: req.body.titulo });
       })
       .catch(console.error)
       .finally(() => client.close());
